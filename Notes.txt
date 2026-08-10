@@ -1,0 +1,7 @@
+User Entity sirve para generar el JWT y no pasar la contraseña
+
+DTO es un contrato, genera la estructura del payload antes de enviar una petición al servidor.
+
+Quiero implementar en respuestas HTTP en mi API
+
+Quiero implementar validationPipe y class-validator desde el inicio de mi app.
