@@ -15,7 +15,7 @@ async function bootstrap() {
     }),
   );
 
-  const {httpAdapter} = app.get(HttpAdapterHost);
+  const { httpAdapter } = app.get(HttpAdapterHost);
   //Using a global exception filter for custom http responses.
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
 
@@ -27,6 +27,7 @@ async function bootstrap() {
     .setDescription('Una Api de Users Auth')
     .setVersion('0.1')
     .addTag('users')
+    .addBearerAuth()
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
