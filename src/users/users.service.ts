@@ -27,7 +27,6 @@ export class UsersService {
   }
 
   async update(user_id: string, updateUserDto: UpdateUserDto) {
-    //PrismaClientKnownRequestError
     return await this.prisma.user.update({
       where: { user_id },
       data: updateUserDto,

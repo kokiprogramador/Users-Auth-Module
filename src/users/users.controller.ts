@@ -29,6 +29,7 @@ export class UsersController {
     if (!data) {
       throw new BadRequestException('Data is missing');
     }
+    return data;
   }
 
   @Get()
