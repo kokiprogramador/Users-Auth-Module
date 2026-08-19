@@ -23,6 +23,9 @@ export class UsersService {
       where: {
         user_id,
       },
+      include: {
+        memberships: true,
+      },
     });
   }
 
