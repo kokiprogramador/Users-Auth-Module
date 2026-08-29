@@ -23,6 +23,7 @@ async function main() {
       userName: 'cocky',
       email: 'cocky@gmail.com',
       password: '123',
+      type: 'ADMIN'
     },
   });
   const organization = await prisma.organization.create({

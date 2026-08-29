@@ -29,7 +29,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       throw (
         err ||
         new UnauthorizedException(
-          'Este error debería aparecer si no tengo un token.',
+          'You need a token to acces to this option.',
         )
       );
     }

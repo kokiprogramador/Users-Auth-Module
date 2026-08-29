@@ -28,6 +28,7 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid password');
     }
+
     return {
       accessToken: this.jwtService.sign({ userId: user.user_id }),
     };

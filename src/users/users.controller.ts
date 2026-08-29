@@ -8,6 +8,7 @@ import {
   Delete,
   NotFoundException,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
@@ -15,13 +16,16 @@ import { UpdateUserDto } from './dto/update-user.dto.js';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity.js';
 import { Public } from '../auth/decorators/is-public.decorator.js';
+import { Admin } from '../auth/decorators/admin.decorator.js';
+import { UserType } from '../../generated/prisma/enums.js';
+import { AdminsGuard } from '../auth/guards/admin.guard.js';
 
-@Public()
 @Controller('users')
 @ApiTags('Users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Public()
   @Post()
   @ApiCreatedResponse({ type: UserEntity })
   async create(@Body() createUserDto: CreateUserDto) {
@@ -58,6 +62,8 @@ export class UsersController {
     return await this.usersService.update(String(id), updateUserDto);
   }
 
+  @Admin(UserType.ADMIN)
+  @UseGuards(AdminsGuard)
   @Delete(':id')
   @ApiCreatedResponse({ type: UserEntity })
   async remove(@Param('id') id: string) {
