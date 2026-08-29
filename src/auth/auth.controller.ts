@@ -9,8 +9,8 @@ import { Public } from './decorators/is-public.decorator.js';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('login')
   @Public()
+  @Post('login')
   @ApiCreatedResponse({ type: AuthEntity })
   async login(@Body() { email, password }: LoginDto) {
     return await this.authService.login(email, password);

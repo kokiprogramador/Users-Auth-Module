@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
@@ -13,17 +14,23 @@ import { OrganizationsService } from './organizations.service.js';
 import { CreateOrganizationDto } from './dto/create-organization.dto.js';
 import { UpdateOrganizationDto } from './dto/update-organization.dto.js';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { Public } from '../auth/decorators/is-public.decorator.js';
 import { OrganizationEntity } from './entities/organization.entity.js';
+import { Admin } from '../auth/decorators/admin.decorator.js';
+import { UserType } from '../../generated/prisma/enums.js';
+import { AdminsGuard } from '../auth/guards/admin.guard.js';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 
 @ApiTags('Organizations')
-@Public()
 @Controller('organizations')
 export class OrganizationsController {
   constructor(private readonly organizationsService: OrganizationsService) {}
 
-  @Post()
+
   @ApiCreatedResponse({ type: OrganizationEntity })
+  @Admin(UserType.ADMIN)
+  @UseGuards(AdminsGuard)
+  @UseGuards(JwtAuthGuard)
+  @Post()
   async create(@Body() createOrganizationDto: CreateOrganizationDto) {
     const data = await this.organizationsService.create(createOrganizationDto);
     if (!data) {
@@ -31,6 +38,7 @@ export class OrganizationsController {
     }
     return data;
   }
+
   @Get()
   @ApiCreatedResponse({ type: OrganizationEntity })
   async findAll() {
@@ -50,7 +58,9 @@ export class OrganizationsController {
     }
     return organization;
   }
-
+  
+  @Admin(UserType.ADMIN)
+  @UseGuards(AdminsGuard) 
   @Patch(':id')
   @ApiCreatedResponse({ type: OrganizationEntity })
   async update(
@@ -59,7 +69,8 @@ export class OrganizationsController {
   ) {
     return this.organizationsService.update(id, updateOrganizationDto);
   }
-
+  @Admin(UserType.ADMIN)
+  @UseGuards(AdminsGuard)
   @Delete(':id')
   @ApiCreatedResponse({ type: OrganizationEntity })
   async remove(@Param('id') id: string) {
