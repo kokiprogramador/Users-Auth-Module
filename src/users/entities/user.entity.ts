@@ -15,6 +15,8 @@ export class UserEntity implements UserWithoutPassword {
   @ApiProperty()
   email!: string;
 
+  hashedRefreshJwt!: string | null;
+
   @ApiProperty()
   createdAt!: Date;
 

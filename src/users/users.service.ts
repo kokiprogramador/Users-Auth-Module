@@ -7,6 +7,22 @@ import { PrismaService } from '../prisma/prisma.service.js';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
+  async updateHashedRefreshToken(user_id: string, hashedRefreshJwt: string | null){
+    const hashedRTUserUpdated = await this.prisma.user.update({
+      where: { 
+        user_id 
+      },
+      data: {
+        hashedRefreshJwt
+      }
+    });
+    return {
+      id: hashedRTUserUpdated.user_id,
+      userName: hashedRTUserUpdated.userName,
+      updatedAt: hashedRTUserUpdated.updatedAt,
+    }
+  }
+
   async create(createUserDto: CreateUserDto) {
     const userCreated = await this.prisma.user.create({
       data: createUserDto,

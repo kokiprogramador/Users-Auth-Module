@@ -6,22 +6,34 @@ import { PassportModule } from '@nestjs/passport';
 import { PrismaModule } from '../prisma/prisma.module.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { UsersModule } from '../users/users.module.js';
-import { jwtStrategy } from './strategy/jwt.strategy.js';
+import { jwtStrategy } from './strategies/jwt.strategy.js';
+import { refreshJwtStrategy } from './strategies/refresh.strategy.js';
 import { UsersService } from '../users/users.service.js';
-
-export const jwtSecret = process.env.SECRET;
+import { ConfigModule } from '@nestjs/config';
+import jwtConfig from './config/jwt.config.js';
+import refreshJwtConfig from './config/refresh-jwt.config.js';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 
 @Module({
   imports: [
     PrismaModule,
     PassportModule,
     UsersModule,
-    JwtModule.register({
-      secret: jwtSecret,
-      signOptions: { expiresIn: '24h' },
-    }),
+    JwtModule.registerAsync(jwtConfig.asProvider()),
+    ConfigModule.forFeature(jwtConfig),
+    ConfigModule.forFeature(refreshJwtConfig)
   ],
   controllers: [AuthController],
-  providers: [AuthService, PrismaService, UsersService, jwtStrategy],
+  providers: [AuthService, 
+              PrismaService, 
+              UsersService, 
+              jwtStrategy,
+              refreshJwtStrategy,
+              {
+                provide: APP_GUARD,
+                useClass: JwtAuthGuard
+              }
+             ],
 })
 export class AuthModule {}

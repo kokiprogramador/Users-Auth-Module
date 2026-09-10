@@ -15,8 +15,6 @@ export class AdminsGuard implements CanActivate {
       context.getClass()
     ])
     const user = context.switchToHttp().getRequest().user;
-    console.log(user)
-    console.log(requiredUserTypes)
     const hasRequiredUserType = requiredUserTypes.some(type => user.type === type)
     return hasRequiredUserType;
   }
