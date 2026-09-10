@@ -16,6 +16,7 @@ model User{
   userName String 
   email String @unique
   password String
+  hashedRefreshJwt String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   type UserType @default(USER)
