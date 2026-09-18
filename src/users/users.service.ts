@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 import { PrismaService } from '../prisma/prisma.service.js';
+import { hash } from 'argon2';
 
 @Injectable()
 export class UsersService {
@@ -24,39 +25,49 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
+    const {password, ...user } = createUserDto;
+    const hashedPassword = await hash(password);
+    console.log(hashedPassword)
     const userCreated = await this.prisma.user.create({
-      data: createUserDto,
+      data: {
+        password: hashedPassword,
+        ...user
+      },
     });
     return userCreated;
   }
 
   async findAll() {
-    return await this.prisma.user.findMany();
+    return await this.prisma.user.findMany({
+      omit: {
+        password: true,
+        hashedRefreshJwt: true
+      }
+    });
   }
 
   async findOne(user_id: string) {
     return await this.prisma.user.findUnique({
       where: {
         user_id,
-      },
-      include: {
-        memberships: true,
-      },
+      }
     });
   }
 
   async update(user_id: string, updateUserDto: UpdateUserDto) {
-    return await this.prisma.user.update({
+    const userUpdated = await this.prisma.user.update({
       where: { user_id },
       data: updateUserDto,
     });
+    return userUpdated;
   }
 
   async remove(user_id: string) {
-    return await this.prisma.user.delete({
+    const userDeleted = await this.prisma.user.delete({
       where: {
         user_id,
       },
     });
+    return userDeleted;
   }
 }

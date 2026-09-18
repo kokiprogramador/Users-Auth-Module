@@ -6,14 +6,12 @@ import {
   Patch,
   Param,
   Delete,
-  NotFoundException,
-  BadRequestException,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity.js';
 import { Public } from '../auth/decorators/is-public.decorator.js';
 import { Admin } from '../auth/decorators/admin.decorator.js';
@@ -27,46 +25,87 @@ export class UsersController {
 
   @Public()
   @Post()
-  @ApiCreatedResponse({ type: UserEntity })
+  @ApiCreatedResponse({description: "Create User/Sign Up",  type: UserEntity })
+  @ApiOperation({
+    summary: 'CREATE USER',
+    description: 'Public endpoint for creating users, anyone can get access.'
+  })
   async create(@Body() createUserDto: CreateUserDto) {
-    const data = await this.usersService.create(createUserDto);
-    if (!data) {
-      throw new BadRequestException('Data is missing');
+    const userCreated =  await this.usersService.create(createUserDto);
+    return {
+      id: userCreated!.user_id,
+      userName: userCreated!.userName,
+      email: userCreated!.email,
+      createdAt: userCreated!.createdAt,
+      updatedAt: userCreated!.updatedAt,
+      userType: userCreated!.type,
     }
-    return data;
   }
 
   @Get()
-  @ApiCreatedResponse({ type: UserEntity })
-  async findAll() {
+  @ApiCreatedResponse({description: "Get User",  type: UserEntity })
+  @ApiOperation({
+    summary: 'GET USERS',
+    description: 'Private endpoint for getting users, only logged users can get access.'
+  })
+  async findAll(){
     const users = await this.usersService.findAll();
-    if (!users) {
-      throw new NotFoundException('Users not found');
-    }
     return users;
   }
 
   @Get(':id')
-  @ApiCreatedResponse({ type: UserEntity })
+  @ApiCreatedResponse({description: "Get one User",  type: UserEntity })
+  @ApiOperation({
+    summary: 'GET USER',
+    description: 'Private endpoint for getting only one user, only logged users can get access'
+  })
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne(id);
-    if (!user) {
-      throw new NotFoundException(`User with id ${id} not found.`);
+    return {
+      id: user!.user_id,
+      userName: user!.userName,
+      email: user!.email,
+      createdAt: user!.createdAt,
+      updatedAt: user!.updatedAt,
+      userType: user!.type,
     }
-    return user;
   }
 
   @Patch(':id')
-  @ApiCreatedResponse({ type: UserEntity })
+  @ApiCreatedResponse({description: "Update User",  type: UserEntity })
+  @ApiOperation({
+    summary: 'UPDATE USER',
+    description: 'Private endpoint for updating user, only logged a logged user can get access.'
+  })
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return await this.usersService.update(String(id), updateUserDto);
+    const user = await this.usersService.update(String(id), updateUserDto);
+    return {
+      id: user!.user_id,
+      userName: user!.userName,
+      email: user!.email,
+      createdAt: user!.createdAt,
+      updatedAt: user!.updatedAt,
+      userType: user!.type,
+    }
   }
 
   @Admin(UserType.ADMIN)
   @UseGuards(AdminsGuard)
   @Delete(':id')
-  @ApiCreatedResponse({ type: UserEntity })
+  @ApiCreatedResponse({description: "Delete user",  type: UserEntity })
+  @ApiOperation({
+    summary: 'DELETE USER',
+    description: 'Private endpoint for deleting users, only admin can delete one user..'
+  })
   async remove(@Param('id') id: string) {
-    return await this.usersService.remove(id);
+    const user =  await this.usersService.remove(id);
+    return {
+      id: user!.user_id,
+      userName: user!.userName,
+      email: user!.email,
+      createdAt: user!.createdAt,
+      updatedAt: user!.updatedAt,
+      userType: user!.type,
+    }
   }
 }

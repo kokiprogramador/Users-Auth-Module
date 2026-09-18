@@ -3,27 +3,25 @@ import { User } from '../../../generated/prisma/client.js';
 import { UserType } from '../../../generated/prisma/client.js';
 import { IsEnum } from 'class-validator';
 
-type UserWithoutPassword = Omit<User, 'password'>;
+type UserHashedRTAndWithoutPassword = Omit<User, 'password' | 'hashedRefreshJwt'>;
 
-export class UserEntity implements UserWithoutPassword {
-  @ApiProperty()
+export class UserEntity implements UserHashedRTAndWithoutPassword  {
+  @ApiProperty({example:"a83ff286-7c5e-4db5-951-d0df0ac1b012"})
   user_id!: string;
 
-  @ApiProperty()
+  @ApiProperty({example: "user123"})
   userName!: string;
 
-  @ApiProperty()
+  @ApiProperty({example: "johndoe@gmail.com"})
   email!: string;
 
-  hashedRefreshJwt!: string | null;
-
-  @ApiProperty()
+  @ApiProperty({example: "2026-09-18T06:30:57.249Z"})
   createdAt!: Date;
 
-  @ApiProperty()
+  @ApiProperty({example: "2026-09-18T06:30:57.249Z"})
   updatedAt!: Date;
 
-  @ApiProperty()
+  @ApiProperty({example: "USER, ADMIN"})
   @IsEnum(UserType)
   type: UserType = 'USER';
 }
