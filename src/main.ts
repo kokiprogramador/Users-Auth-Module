@@ -1,6 +1,6 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module.js';
-import { ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { TransformInterceptor } from './interceptors/transform/transform.interceptor.js';
 import { PrismaClientExceptionFilter } from './prisma-client-exception/prisma-client-exception.filter.js';
@@ -16,11 +16,19 @@ async function bootstrap() {
   );
 
   const { httpAdapter } = app.get(HttpAdapterHost);
-  //Using a global exception filter for custom http responses.
+
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
 
-  //Using global interceptors for custom OK responses.
   app.useGlobalInterceptors(new TransformInterceptor());
+
+  // app.useGlobalInterceptors(
+  //   new ClassSerializerInterceptor(app.get(Reflector),
+  //     {
+  //       strategy: 'excludeAll',
+  //       excludeExtraneousValues: true,
+  //     }
+  //   )
+  // )
 
   const config = new DocumentBuilder()
     .setTitle('Api De Cocky')
