@@ -19,11 +19,17 @@ $ pnpm i
 
     Env variables:
     [POSTGRES_USER] / Your PostgreSQL database user.
+
     [POSTGRES_PASSWORD] / Your PostgreSQL database password.
+
     [PGADMIN_DEFAULT_EMAIL] / Your PgAdmin email.
+
     [PGADMIN_DEFAULT_PASSWORD] / Your PgAdmin password.
+
     [SECRET] / Your OpenSSL secret token.
+
     [REFRESH_SECRET] / Your OpenSSL refresh secret token. 
+
     [DATABASE_URL] / Your database URL
 
 4. Configure your database server (Docker or local environment).
