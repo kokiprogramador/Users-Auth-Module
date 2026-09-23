@@ -43,9 +43,13 @@ $ pnpm run db:db:generate
 $ pnpm run db:seed 
 ```
 ---What are we doing here? First, we synchronize our Prisma schema with our database.
+
 ---Second, we make migrations to generate tables in our database.
+
 ---Third, we generate our Prisma client so we can use its instance in the project.
+
 ---Fourth, and finally, we seed our database with some dummy data.
+
 
 6. Run the project in dev mode.
 ```bash
