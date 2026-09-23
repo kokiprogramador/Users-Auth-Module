@@ -414,3 +414,7 @@ $ pnpm run start:dev
     ]
 }
 ```
+
+# Credits.
+
+## Users Auth Module By Leonardo Martínez.
