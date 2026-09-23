@@ -19,11 +19,17 @@ $ pnpm i
 
     Env variables:
     [POSTGRES_USER] / Your PostgreSQL database user.
+
     [POSTGRES_PASSWORD] / Your PostgreSQL database password.
+
     [PGADMIN_DEFAULT_EMAIL] / Your PgAdmin email.
+
     [PGADMIN_DEFAULT_PASSWORD] / Your PgAdmin password.
+
     [SECRET] / Your OpenSSL secret token.
+
     [REFRESH_SECRET] / Your OpenSSL refresh secret token. 
+
     [DATABASE_URL] / Your database URL
 
 4. Configure your database server (Docker or local environment).
@@ -37,9 +43,13 @@ $ pnpm run db:db:generate
 $ pnpm run db:seed 
 ```
 ---What are we doing here? First, we synchronize our Prisma schema with our database.
+
 ---Second, we make migrations to generate tables in our database.
+
 ---Third, we generate our Prisma client so we can use its instance in the project.
+
 ---Fourth, and finally, we seed our database with some dummy data.
+
 
 6. Run the project in dev mode.
 ```bash
