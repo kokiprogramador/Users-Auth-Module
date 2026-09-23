@@ -17,7 +17,8 @@ $ pnpm i
 3. Configure the environment variables.
      You can use the .env.example for this.
 
-    Env variables:
+    Enviroment variables:
+
     [POSTGRES_USER] / Your PostgreSQL database user.
 
     [POSTGRES_PASSWORD] / Your PostgreSQL database password.
@@ -38,8 +39,7 @@ $ pnpm i
 5. Run your database and generate your Prisma client.
 ```bash
 $ pnpm run db:push
-$ pnpm run db:migrate
-$ pnpm run db:db:generate
+$ pnpm run db:generate
 $ pnpm run db:seed 
 ```
 ---What are we doing here? First, we synchronize our Prisma schema with our database.
@@ -106,7 +106,7 @@ $ pnpm run start:dev
             "createdAt": "2026-09-18T06:30:57.249Z",
             "updatedAt": "2026-09-18T06:30:57.249Z",
             "type": "USER"
-            }
+        }
   ]
 }
 ```
@@ -116,6 +116,7 @@ $ pnpm run start:dev
     "userName": "JohnDoe",
     "email": "johndoe@gmail.com",
     "password": "1234124"
+    //Note: Use the seed.ts in the prisma folder to create an admin user
     }
 ```
 
@@ -167,9 +168,7 @@ $ pnpm run start:dev
     "userName": "John Doe",
     "email": "johndoe@gmail.com",
     "password": "passwordsex",
-    "type": "USER | ADMIN"
     }
-    //Note: I allow you to change your user type like this to make things easier, this is a bad practice.
 ```
 
 - **DELETE** `/users/{id}`

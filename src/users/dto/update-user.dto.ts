@@ -1,6 +1,5 @@
 import { CreateUserDto } from './create-user.dto.js';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { UserType } from '../../../generated/prisma/enums.js';
 import { Trim, Lowercase } from '../dataSanitizer/Sanitizer.js';
 import { IsString, IsEmail, IsEnum, IsNotEmpty } from 'class-validator';
 
@@ -23,8 +22,4 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsString()
   @IsNotEmpty()
   password?: string | undefined;
-
-  @ApiProperty({ required: false, example: 'USER | ADMIN' })
-  @IsEnum(UserType)
-  type?: UserType | undefined;
 }
